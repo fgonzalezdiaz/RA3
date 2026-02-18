@@ -22,7 +22,7 @@ public class Product {
     private int stock;
     private Date dataCreated;
     private Date dataUpdated;
-    protected Product(){}
+    public Product(){}
     
     @PrePersist
     protected void onCreate() {

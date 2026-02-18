@@ -29,11 +29,13 @@ public class ProductController {
     @Autowired
     public ProductRepository productRepository;
 
+
     @GetMapping("/all")
     public Iterable<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // CAMBIAR ESTE Y CREAR UNO PARA BUSQUEDA CON LOS DTO
     @PostMapping("/create")
     public String createProduct(@RequestBody Product product) {
         
