@@ -1,22 +1,27 @@
 package com.ra3.jpa.ra3.dto;
 
+import java.math.BigDecimal;
+
+import com.ra3.jpa.ra3.model.Condition;
+
 public class ProductRequestDto {
-    private Long id;
+
     private String name;
-    private String address;
+    private String description;
+    private Integer stock;
+    private BigDecimal price;
+    private BigDecimal rating;
+    private Condition condition;
 
-    public ProductRequestDto(Long id, String name, String address){
-        this.id = id;
+    public ProductRequestDto() {}
+
+    public ProductRequestDto(String name, String description, Integer stock, BigDecimal price, BigDecimal rating, Condition condition) {
         this.name = name;
-        this.address = address;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.description = description;
+        this.stock = stock;
+        this.price = price;
+        this.rating = rating;
+        this.condition = condition;
     }
 
     public String getName() {
@@ -27,11 +32,43 @@ public class ProductRequestDto {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Condition condition) {
+        this.condition = condition;
     }
 }
