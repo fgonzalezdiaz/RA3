@@ -1,11 +1,14 @@
 package com.ra3.jpa.ra3.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class OrderItem {
@@ -14,35 +17,23 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Logica de relaciones 
-    private Long orderId;
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "orderId")
+    private Order order;
 
-    public OrderItem(Long orderId, Long productId, Long quantity, BigDecimal unitPrice) {
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
+    @ManyToOne
+    @JoinColumn(name = "productId")
+    private Product product;
+
     private Long quantity;
     private BigDecimal unitPrice;
+
+
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
-    }
-    public Long getOrderId() {
-        return orderId;
-    }
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-    public Long getProductId() {
-        return productId;
-    }
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
     public Long getQuantity() {
         return quantity;

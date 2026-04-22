@@ -1,9 +1,10 @@
 package com.ra3.jpa.ra3.model;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.mapping.Array;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,42 +12,40 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Order {
+public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
-
-    private Date orderDate;
-    private BigDecimal totalAmount;
-    private OrderStatus orderStatus;
+    private String email;
+    private String password;
     private Boolean status;
     private Date dataCreated;
     private Date dataUpdated;
 
-    //Relaion con OrderItem
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orders;
-   
-    // Relacion con invoice
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Invoice invoice;
-    
-    public Order(Date orderDate, BigDecimal totalAmount, OrderStatus orderStatus,
-            Boolean status, Date dataCreated, Date dataUpdated) {
-        this.orderDate = orderDate;
-        this.totalAmount = totalAmount;
-        this.orderStatus = orderStatus;
+    @ManyToMany
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "userId"),
+        inverseJoinColumns = @JoinColumn(name = "roleId")
+    )
+    private List<Role> roles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private User user;
+
+
+    public User(String email, String password, Boolean status, Date dataCreated, Date dataUpdated) {
+        this.email = email;
+        this.password = password;
         this.status = status;
         this.dataCreated = dataCreated;
         this.dataUpdated = dataUpdated;
@@ -57,23 +56,17 @@ public class Order {
     public void setId(Long id) {
         this.id = id;
     }
-    public Date getOrderDate() {
-        return orderDate;
+    public String getEmail() {
+        return email;
     }
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setEmail(String email) {
+        this.email = email;
     }
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public String getPassword() {
+        return password;
     }
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setPassword(String password) {
+        this.password = password;
     }
     public Boolean getStatus() {
         return status;
@@ -94,4 +87,5 @@ public class Order {
         this.dataUpdated = dataUpdated;
     }
 
+    
 }
