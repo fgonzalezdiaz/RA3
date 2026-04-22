@@ -42,14 +42,6 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
-
-    public User(String email, String password, Boolean status, Date dataCreated, Date dataUpdated) {
-        this.email = email;
-        this.password = password;
-        this.status = status;
-        this.dataCreated = dataCreated;
-        this.dataUpdated = dataUpdated;
-    }
     public Long getId() {
         return id;
     }
