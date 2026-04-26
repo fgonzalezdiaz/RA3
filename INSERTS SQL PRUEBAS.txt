@@ -1,0 +1,115 @@
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE invoice;
+TRUNCATE TABLE order_item;
+TRUNCATE TABLE orders;
+TRUNCATE TABLE address;
+TRUNCATE TABLE user_roles;
+TRUNCATE TABLE customer;
+TRUNCATE TABLE product;
+TRUNCATE TABLE user;
+SET FOREIGN_KEY_CHECKS = 1;
+-- 2. USER
+INSERT INTO user (email, password, status, data_created, data_updated) VALUES
+('admin@shop.com', 'pass_admin1', 1, CURDATE(), CURDATE()),
+('manager@shop.com', 'pass_manager2', 1, CURDATE(), CURDATE()),
+('joan@gmail.com', 'pass_joan3', 1, CURDATE(), CURDATE()),
+('maria@gmail.com', 'pass_maria4', 1, CURDATE(), CURDATE()),
+('pere@gmail.com', 'pass_pere5', 1, CURDATE(), CURDATE()),
+('anna@gmail.com', 'pass_anna6', 1, CURDATE(), CURDATE()),
+('lluc@gmail.com', 'pass_lluc7', 1, CURDATE(), CURDATE()),
+('sofia@gmail.com', 'pass_sofia8', 1, CURDATE(), CURDATE()),
+('marc@gmail.com', 'pass_marc9', 1, CURDATE(), CURDATE()),
+('laia@gmail.com', 'pass_laia10', 1, CURDATE(), CURDATE());
+
+-- 3. USER_ROLES
+INSERT INTO user_roles (user_id, role_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 3),
+(5, 3),
+(6, 3),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 3);
+
+-- 4. CUSTOMER
+INSERT INTO customer (first_name, last_name, phone, status, data_created, data_updated, user_id) VALUES
+('Joan', 'García', '611111111', 1, CURDATE(), CURDATE(), 3),
+('Maria', 'López', '622222222', 1, CURDATE(), CURDATE(), 4),
+('Pere', 'Martínez', '633333333', 1, CURDATE(), CURDATE(), 5),
+('Anna', 'Fernández', '644444444', 1, CURDATE(), CURDATE(), 6),
+('Lluc', 'Sánchez', '655555555', 1, CURDATE(), CURDATE(), 7),
+('Sofia', 'Pérez', '666666666', 1, CURDATE(), CURDATE(), 8),
+('Marc', 'Gómez', '677777777', 1, CURDATE(), CURDATE(), 9),
+('Laia', 'Díaz', '688888888', 1, CURDATE(), CURDATE(), 10);
+
+-- 5. ADDRESS
+INSERT INTO address (address, city, country, postal_code, is_default, customer_id) VALUES
+('Carrer Major 1', 'Barcelona', 'Espanya', '08001', 1, 1),
+('Carrer Nou 2', 'Girona', 'Espanya', '17001', 1, 2),
+('Avinguda Central 3', 'Tarragona', 'Espanya', '43001', 1, 3),
+('Carrer Gran 4', 'Lleida', 'Espanya', '25001', 1, 4),
+('Passeig de Gràcia 5', 'Barcelona', 'Espanya', '08002', 1, 5),
+('Rambla Nova 6', 'Tarragona', 'Espanya', '43002', 1, 6),
+('Carrer Ample 7', 'Girona', 'Espanya', '17002', 1, 7),
+('Avinguda Paisos 8', 'Lleida', 'Espanya', '25002', 1, 8),
+('Carrer Urgell 9', 'Barcelona', 'Espanya', '08003', 1, 1),
+('Carrer Muntaner 10', 'Barcelona', 'Espanya', '08004', 1, 2);
+
+-- 6. PRODUCT
+INSERT INTO product (name, description, price, stock, rating, status, data_created, data_updated, product_condition) VALUES
+('Portàtil HP', 'Portàtil HP 15 polzades', 599.99, 20, 4.5, 1, CURDATE(), CURDATE(), 'NOU'),
+('Teclat Logitech', 'Teclat sense fils Logitech', 49.99, 50, 4.2, 1, CURDATE(), CURDATE(), 'NOU'),
+('Ratolí Gaming', 'Ratolí gaming RGB', 35.99, 40, 4.0, 1, CURDATE(), CURDATE(), 'NOU'),
+('Monitor Samsung', 'Monitor 24 polzades Full HD', 229.99, 15, 4.7, 1, CURDATE(), CURDATE(), 'NOU'),
+('Auriculars Sony', 'Auriculars sense fils Sony', 89.99, 30, 4.3, 1, CURDATE(), CURDATE(), 'BON_ESTAT'),
+('Webcam Logitech', 'Webcam HD 1080p', 79.99, 25, 4.1, 1, CURDATE(), CURDATE(), 'NOU'),
+('Disc Dur 1TB', 'Disc dur extern 1TB USB', 59.99, 35, 4.4, 1, CURDATE(), CURDATE(), 'BON_ESTAT'),
+('Tablet Samsung', 'Tablet Samsung 10 polzades', 299.99, 10, 4.6, 1, CURDATE(), CURDATE(), 'NOU'),
+('Cable HDMI', 'Cable HDMI 2m', 9.99, 100, 3.9, 1, CURDATE(), CURDATE(), 'NOU'),
+('Hub USB', 'Hub USB 4 ports', 19.99, 60, 4.0, 1, CURDATE(), CURDATE(), 'ACCEPTABLE');
+
+-- 7. ORDERS
+INSERT INTO orders (order_date, order_status, status, total_amount, data_created, data_updated, customer_id) VALUES
+('2026-01-10', 0, 1, 649.98, CURDATE(), CURDATE(), 1),
+('2026-01-15', 1, 1, 229.99, CURDATE(), CURDATE(), 2),
+('2026-01-20', 0, 1, 125.98, CURDATE(), CURDATE(), 3),
+('2026-02-01', 1, 1, 299.99, CURDATE(), CURDATE(), 4),
+('2026-02-10', 0, 1, 89.99, CURDATE(), CURDATE(), 5),
+('2026-02-15', 2, 1, 59.99, CURDATE(), CURDATE(), 6),
+('2026-03-01', 1, 1, 579.98, CURDATE(), CURDATE(), 7),
+('2026-03-10', 0, 1, 49.99, CURDATE(), CURDATE(), 8),
+('2026-03-20', 1, 1, 309.98, CURDATE(), CURDATE(), 1),
+('2026-04-01', 0, 1, 19.99, CURDATE(), CURDATE(), 2);
+
+-- 8. ORDER_ITEM
+INSERT INTO order_item (order_id, product_id, quantity, unit_price) VALUES
+(1, 1, 1, 599.99),
+(1, 2, 1, 49.99),
+(2, 4, 1, 229.99),
+(3, 3, 1, 35.99),
+(3, 9, 1, 9.99),
+(4, 8, 1, 299.99),
+(5, 5, 1, 89.99),
+(6, 7, 1, 59.99),
+(7, 1, 1, 599.99),
+(7, 9, 1, 9.99),
+(8, 2, 1, 49.99),
+(9, 8, 1, 299.99),
+(9, 10, 1, 19.99),
+(10, 10, 1, 19.99);
+
+-- 9. INVOICE
+INSERT INTO invoice (order_id, invoice_number, issue_date, tax_amount, total_with_tax) VALUES
+(1, 'INV-2026-001', '2026-01-10', 136.50, 786.48),
+(2, 'INV-2026-002', '2026-01-15', 48.30, 278.29),
+(3, 'INV-2026-003', '2026-01-20', 26.46, 152.44),
+(4, 'INV-2026-004', '2026-02-01', 63.00, 362.99),
+(5, 'INV-2026-005', '2026-02-10', 18.90, 108.89),
+(6, 'INV-2026-006', '2026-02-15', 12.60, 72.59),
+(7, 'INV-2026-007', '2026-03-01', 121.80, 701.78),
+(8, 'INV-2026-008', '2026-03-10', 10.50, 60.49),
+(9, 'INV-2026-009', '2026-03-20', 65.10, 375.08),
+(10, 'INV-2026-010', '2026-04-01', 4.20, 24.19);
