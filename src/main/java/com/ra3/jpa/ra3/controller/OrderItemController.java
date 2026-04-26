@@ -11,39 +11,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ra3.jpa.ra3.dto.UserDto;
-import com.ra3.jpa.ra3.service.UserService;
+import com.ra3.jpa.ra3.dto.OrderItemDto;
+import com.ra3.jpa.ra3.service.OrderItemService;
 
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/orderitem")
+public class OrderItemController {
 
     @Autowired
-    UserService userService;
+    OrderItemService orderItemService;
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
-        return userService.findAll();
+        return orderItemService.findAll();
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        return userService.findById(id);
+        return orderItemService.findById(id);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody UserDto userDto) {
-        return userService.save(userDto);
+    public ResponseEntity<?> save(@RequestBody OrderItemDto orderItemDto) {
+        return orderItemService.save(orderItemDto);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody UserDto userDto) {
-        return userService.update(id, userDto);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OrderItemDto orderItemDto) {
+        return orderItemService.update(id, orderItemDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        return userService.delete(id);
+        return orderItemService.delete(id);
     }
 
 }

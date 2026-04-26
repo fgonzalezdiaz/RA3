@@ -16,11 +16,14 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
     private Roles name;
     private String description;
     
     @ManyToMany(mappedBy = "roles")
     private List<User> user = new ArrayList<>();
+
+    public Role() {}
 
     public Role(Roles name, String description) {
         this.name = name;

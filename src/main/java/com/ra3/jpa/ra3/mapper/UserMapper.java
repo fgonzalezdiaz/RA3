@@ -13,7 +13,7 @@ public class UserMapper {
         return user;
     }
 
-    public static UserDto userDto(User user){
+    public static UserDto toDto(User user){
         UserDto userDto = new UserDto();
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());

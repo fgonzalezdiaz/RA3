@@ -29,6 +29,7 @@ public class Customer {
     private Date dataUpdated;
 
     @OneToOne(fetch = FetchType.LAZY)
+    
     @JoinColumn(name = "userId", unique = true)
     private User user;
 

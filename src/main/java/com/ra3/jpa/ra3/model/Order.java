@@ -7,6 +7,8 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +17,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "Orders")
 public class Order {
     
     @Id
@@ -29,6 +33,8 @@ public class Order {
 
     private Date orderDate;
     private BigDecimal totalAmount;
+
+    @Enumerated(EnumType.ORDINAL)
     private OrderStatus orderStatus;
     private Boolean status;
     private Date dataCreated;
@@ -42,6 +48,8 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Invoice invoice;
     
+    public Order() {}
+
     public Order(Date orderDate, BigDecimal totalAmount, OrderStatus orderStatus,
             Boolean status, Date dataCreated, Date dataUpdated) {
         this.orderDate = orderDate;
@@ -92,6 +100,12 @@ public class Order {
     }
     public void setDataUpdated(Date dataUpdated) {
         this.dataUpdated = dataUpdated;
+    }
+    public Customer getCustomer() {
+        return customer;
+    }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
 }
