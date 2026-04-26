@@ -8,7 +8,7 @@ public class AddressDto {
     private String postalCode;
     private String country;
 
-    public Address toEntity(AddressDto addressDto){
+    public static Address toEntity(AddressDto addressDto){
         Address address = new Address();
         address.setAddress(addressDto.getAddress());
         address.setCity(addressDto.getCity());
@@ -18,7 +18,7 @@ public class AddressDto {
         return address;
     }
 
-    public AddressDto toDto(Address address){
+    public static AddressDto toDto(Address address){
         AddressDto addressDto = new AddressDto();
         addressDto.setAddress(address.getAddress());
         addressDto.setCity(address.getCity());

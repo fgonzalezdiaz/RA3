@@ -38,11 +38,7 @@ public class OrderService {
         if (!customer.isPresent()) {
             return ResponseEntity.ok().body("Este customer no existe");
         }
-        Order order = new Order();
-        order.setCustomer(customer.get());
-        order.setOrderDate(orderDto.getOrderDate());
-        order.setTotalAmount(orderDto.getTotalAmount());
-        order.setOrderStatus(orderDto.getOrderStatus());
+        Order order = OrderDto.toEntity(orderDto, customer.get());
         order.setStatus(true);
         orderRepository.save(order);
         return ResponseEntity.ok().body("Order guardado correctamente");

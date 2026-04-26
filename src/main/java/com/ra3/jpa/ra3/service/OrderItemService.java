@@ -47,11 +47,7 @@ public class OrderItemService {
         if (!product.isPresent()) {
             return ResponseEntity.ok().body("Este producto no existe");
         }
-        OrderItem orderItem = new OrderItem();
-        orderItem.setOrder(order.get());
-        orderItem.setProduct(product.get());
-        orderItem.setQuantity(orderItemDto.getQuantity());
-        orderItem.setUnitPrice(orderItemDto.getUnitPrice());
+        OrderItem orderItem = OrderItemDto.toEntity(orderItemDto, order.get(), product.get());
         orderItemRepository.save(orderItem);
         return ResponseEntity.ok().body("OrderItem guardado correctamente");
     }

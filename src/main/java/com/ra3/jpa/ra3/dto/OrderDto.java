@@ -3,6 +3,8 @@ package com.ra3.jpa.ra3.dto;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+import com.ra3.jpa.ra3.model.Customer;
+import com.ra3.jpa.ra3.model.Order;
 import com.ra3.jpa.ra3.model.OrderStatus;
 
 public class OrderDto {
@@ -11,6 +13,24 @@ public class OrderDto {
     private Date orderDate;
     private BigDecimal totalAmount;
     private OrderStatus orderStatus;
+
+    public static OrderDto toDto(Order order) {
+        OrderDto dto = new OrderDto();
+        dto.setCustomerId(order.getCustomer().getId());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setTotalAmount(order.getTotalAmount());
+        dto.setOrderStatus(order.getOrderStatus());
+        return dto;
+    }
+
+    public static Order toEntity(OrderDto orderDto, Customer customer) {
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setOrderDate(orderDto.getOrderDate());
+        order.setTotalAmount(orderDto.getTotalAmount());
+        order.setOrderStatus(orderDto.getOrderStatus());
+        return order;
+    }
 
     public Long getCustomerId() {
         return customerId;

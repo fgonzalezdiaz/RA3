@@ -29,9 +29,7 @@ public class UserService {
     }
 
     public ResponseEntity<?> save(UserDto userDto) {
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        User user = UserDto.toEntity(userDto);
         user.setStatus(true);
         userRepository.save(user);
         return ResponseEntity.ok().body("User guardado correctamente");

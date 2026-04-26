@@ -8,8 +8,6 @@ public class ErrorDto {
     private int status;
     private String description;
 
-    public ErrorDto() {}
-
     public ErrorDto(int status, String description) {
         this.status = status;
         this.description = description;

@@ -38,12 +38,7 @@ public class InvoiceService {
         if (!order.isPresent()) {
             return ResponseEntity.ok().body("Este order no existe");
         }
-        Invoice invoice = new Invoice();
-        invoice.setOrder(order.get());
-        invoice.setInvoiceNumber(invoiceDto.getInvoiceNumber());
-        invoice.setIssueDate(invoiceDto.getIssueDate());
-        invoice.setTaxAmount(invoiceDto.getTaxAmount());
-        invoice.setTotalWithTax(invoiceDto.getTotalWithTax());
+        Invoice invoice = InvoiceDto.toEntity(invoiceDto, order.get());
         invoiceRepository.save(invoice);
         return ResponseEntity.ok().body("Invoice guardada correctamente");
     }

@@ -5,10 +5,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ra3.jpa.ra3.dto.AddressDto;
 import com.ra3.jpa.ra3.dto.CreateOrderRequestDto;
 import com.ra3.jpa.ra3.dto.CreateOrderResponseDto;
 import com.ra3.jpa.ra3.dto.CustomerAddressDto;
@@ -18,16 +18,13 @@ import com.ra3.jpa.ra3.dto.RoleDto;
 import com.ra3.jpa.ra3.dto.UserCustomerDto;
 import com.ra3.jpa.ra3.dto.UserDto;
 import com.ra3.jpa.ra3.dto.UsuariRolesDto;
-import com.ra3.jpa.ra3.mapper.CustomerMapper;
-import com.ra3.jpa.ra3.mapper.UserCustomerMapper;
-import com.ra3.jpa.ra3.mapper.UserMapper;
 import com.ra3.jpa.ra3.model.Address;
 import com.ra3.jpa.ra3.model.Customer;
 import com.ra3.jpa.ra3.model.Order;
 import com.ra3.jpa.ra3.model.OrderItem;
+import com.ra3.jpa.ra3.model.Role;
 import com.ra3.jpa.ra3.model.OrderStatus;
 import com.ra3.jpa.ra3.model.Product;
-import com.ra3.jpa.ra3.model.Role;
 import com.ra3.jpa.ra3.model.User;
 import com.ra3.jpa.ra3.repository.AddressRepository;
 import com.ra3.jpa.ra3.repository.CustomerRepository;
@@ -59,53 +56,43 @@ public class GeneralService {
     @Autowired
     ProductRepository productRepository;
 
-    
     @Transactional
-    public UserDto createUserCustomer(UserCustomerDto userCustomerDto)throws Exception{
-        UserDto userDto = UserCustomerMapper.userCustomerToUserDto(userCustomerDto);
-        CustomerDto customerDto = UserCustomerMapper.userCustomerToCustomerDto(userCustomerDto);
-
-        // Conversion de UserDto to User (Entity)
+    public UserDto createUserCustomer(UserCustomerDto userCustomerDto) throws Exception {
         User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-            
-        // Conversion de CustomerDto to Customer (Entity)
+        user.setEmail(userCustomerDto.getEmail());
+        user.setPassword(userCustomerDto.getPassword());
+
         Customer customer = new Customer();
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setPhone(customerDto.getPhone());
-          
+        customer.setFirstName(userCustomerDto.getFirstName());
+        customer.setLastName(userCustomerDto.getLastName());
+        customer.setPhone(userCustomerDto.getPhone());
+
         userRepository.save(user);
         customerRepository.save(customer);
 
-
-        return UserMapper.toDto(user);
+        return UserDto.toDto(user);
     }
 
-    public UserCustomerDto findAllInfoUser(Long id){
-        User user = (userRepository.findById(id)).get();
-        Customer customer = (customerRepository.findById(id)).get();
+    public UserCustomerDto findAllInfoUser(Long id) {
+        User user = userRepository.findById(id).get();
+        Customer customer = customerRepository.findById(id).get();
 
-        UserDto userDto = UserMapper.toDto(user);
-        CustomerDto customerDto = CustomerMapper.toDto(customer);
+        UserDto userDto = UserDto.toDto(user);
+        CustomerDto customerDto = CustomerDto.toDto(customer);
 
-        UserCustomerDto userCustomerDto = new UserCustomerDto(userDto.getEmail(), userDto.getPassword(), customerDto.getFirstName() , customerDto.getLastName(), customerDto.getPhone());
-
-        return userCustomerDto;
+        return new UserCustomerDto(userDto.getEmail(), userDto.getPassword(),
+                customerDto.getFirstName(), customerDto.getLastName(), customerDto.getPhone());
     }
 
     @Transactional
-    public String deleteCustomerAddress(Long id){
-        if((customerRepository.findById(id)).isPresent()){            
+    public String deleteCustomerAddress(Long id) {
+        if (customerRepository.findById(id).isPresent()) {
             addressRepository.deleteByCustomerId(id);
             return "Borrados correctamente";
-
-        } else {
-            return "Este customer no existe";
         }
+        return "Este customer no existe";
     }
-    
+
     @Transactional
     public CreateOrderResponseDto createOrder(CreateOrderRequestDto dto) throws Exception {
         Customer customer = customerRepository.findById(dto.getIdCustomer())
@@ -134,13 +121,7 @@ public class GeneralService {
             orderItemRepository.save(item);
 
             totalAmount = totalAmount.add(product.getPrice());
-
-            OrderItemDto itemDto = new OrderItemDto();
-            itemDto.setOrderId(order.getId());
-            itemDto.setProductId(product.getId());
-            itemDto.setQuantity(1L);
-            itemDto.setUnitPrice(product.getPrice());
-            items.add(itemDto);
+            items.add(OrderItemDto.toDto(item));
         }
 
         order.setTotalAmount(totalAmount);
@@ -173,12 +154,7 @@ public class GeneralService {
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
         List<OrderItemDto> items = new ArrayList<>();
         for (OrderItem oi : orderItems) {
-            OrderItemDto itemDto = new OrderItemDto();
-            itemDto.setOrderId(order.getId());
-            itemDto.setProductId(oi.getProduct().getId());
-            itemDto.setQuantity(oi.getQuantity());
-            itemDto.setUnitPrice(oi.getUnitPrice());
-            items.add(itemDto);
+            items.add(OrderItemDto.toDto(oi));
         }
 
         CreateOrderResponseDto response = new CreateOrderResponseDto();
@@ -192,61 +168,49 @@ public class GeneralService {
         return response;
     }
 
-    public List<CustomerAddressDto> findAllCustomerAddress(){
+    public List<CustomerAddressDto> findAllCustomerAddress() {
         List<Customer> customers = customerRepository.findAll();
-        
-        List<CustomerAddressDto> lista = new ArrayList<CustomerAddressDto>();
-        
-        for(int i = 0; i < customers.size(); i++){
-            Customer c = customers.get(i);
-            Address adr = addressRepository.findByCustomerId(c.getId());
+        List<CustomerAddressDto> lista = new ArrayList<>();
+
+        for (Customer c : customers) {
+            List<Address> addresses = addressRepository.findByCustomerId(c.getId());
+            List<AddressDto> addressDtos = new ArrayList<>();
+            for (Address a : addresses) {
+                addressDtos.add(AddressDto.toDto(a));
+            }
 
             CustomerAddressDto customerAddressDto = new CustomerAddressDto();
             customerAddressDto.setFirstName(c.getFirstName());
             customerAddressDto.setLastName(c.getLastName());
             customerAddressDto.setPhone(c.getPhone());
+            customerAddressDto.setAddreses(addressDtos);
 
-            if(adr != null){
-                customerAddressDto.setAddress(adr.getAddress());
-                customerAddressDto.setCity(adr.getCity());
-                customerAddressDto.setPostalCode(adr.getPostalCode());
-                customerAddressDto.setCountry(adr.getCountry());
-            }
-
-
-            lista.add(customerAddressDto);            
+            lista.add(customerAddressDto);
         }
 
         return lista;
     }
 
     @Transactional
-    public UsuariRolesDto eliminaRolesUsuari(Long id, List<Long> idRoles){
+    public UsuariRolesDto eliminaRolesUsuari(Long id, List<Long> idRoles) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-            UsuariRolesDto usuariRolesDto = new UsuariRolesDto();
-            usuariRolesDto.setEmail(user.getEmail());
-            
-            user.getRoles().removeIf(role -> idRoles.contains(role.getId()));
-            userRepository.save(user);
-
-            List<Role> roles = user.getRoles();
-            List<RoleDto> rolesDto = new ArrayList<RoleDto>();
-            for(Role role : roles){
-                RoleDto roleDto = new RoleDto();
-                roleDto.setName(role.getName());
-                roleDto.setDescription(role.getDescription());
-
-                rolesDto.add(roleDto);
-            }
-            
-
-            usuariRolesDto.setRoles(rolesDto);
-
-            return usuariRolesDto;
-        } else {
+        if (!optionalUser.isPresent()) {
             return null;
         }
+        User user = optionalUser.get();
+        user.getRoles().removeIf(role -> idRoles.contains(role.getId()));
+        userRepository.save(user);
+
+        List<RoleDto> rolesDto = new ArrayList<>();
+        for (Role r : user.getRoles()) {
+            rolesDto.add(RoleDto.toDto(r));
+        }
+
+        UsuariRolesDto usuariRolesDto = new UsuariRolesDto();
+        usuariRolesDto.setEmail(user.getEmail());
+        usuariRolesDto.setRoles(rolesDto);
+
+        return usuariRolesDto;
     }
+
 }

@@ -29,9 +29,7 @@ public class RoleService {
     }
 
     public ResponseEntity<?> save(RoleDto roleDto) {
-        Role role = new Role();
-        role.setName(roleDto.getName());
-        role.setDescription(roleDto.getDescription());
+        Role role = RoleDto.toEntity(roleDto);
         roleRepository.save(role);
         return ResponseEntity.ok().body("Role guardado correctamente");
     }

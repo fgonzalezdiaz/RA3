@@ -29,10 +29,7 @@ public class CustomerService {
     }
 
     public ResponseEntity<?> save(CustomerDto customerDto) {
-        Customer customer = new Customer();
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setPhone(customerDto.getPhone());
+        Customer customer = CustomerDto.toEntity(customerDto);
         customer.setStatus(true);
         customerRepository.save(customer);
         return ResponseEntity.ok().body("Customer guardado correctamente");
